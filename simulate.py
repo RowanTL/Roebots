@@ -1,6 +1,10 @@
 import pybullet as p
-# from time import sleep
+from time import sleep
 
 physicsClient = p.connect(p.GUI)
-# sleep(10)
+
+for _ in range(1000):
+    p.stepSimulation()
+    sleep((1/150))
+
 p.disconnect()
