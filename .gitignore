@@ -1,3 +1,4 @@
 # annoying python files
 *.pyc
 venv
+__pycache__
