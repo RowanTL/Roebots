@@ -17,13 +17,16 @@ pyrosim.Prepare_To_Simulate(robotId)
 
 iter_amt: int = 100
 backlegSensorValues = np.zeros(iter_amt)
+frontlegSensorValues = np.zeros(iter_amt)
 
 for n in range(iter_amt):
     p.stepSimulation()
     # touch sensors only work with non-root links
     backlegSensorValues[n] = pyrosim.Get_Touch_Sensor_Value_For_Link("Backleg")
+    frontlegSensorValues[n] = pyrosim.Get_Touch_Sensor_Value_For_Link("Frontleg")
     sleep((1/70))
 
 print(backlegSensorValues)
 np.save("data/backlegSensor.npy", backlegSensorValues)
+np.save("data/frontlegSensor.npy", frontlegSensorValues)
 p.disconnect()
