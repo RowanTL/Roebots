@@ -23,6 +23,8 @@ s = 1  # size for later
     pyrosim.End()"""
 
 # Assignment code for joints
+# If two links are connected by joint, angle between them considered to be
+# 0 radians
 def Create_Robot():
     pyrosim.Start_URDF("body.urdf")
     pyrosim.Send_Cube(name="Torso", pos=[0,0,1.5], size=[1,1,1])
