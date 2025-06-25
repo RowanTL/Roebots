@@ -3,7 +3,16 @@ import pybullet_data
 from time import sleep
 import pyrosim.pyrosim as pyrosim
 import numpy as np
-import math
+import random
+import matplotlib.pyplot as plt
+
+Backleg_amplitude = np.pi / 4
+Backleg_frequency = 6
+Backleg_phaseOffset = np.pi / 4
+Frontleg_amplitude = np.pi / 4
+Frontleg_frequency = 6
+Frontleg_phaseOffset = 0
+
 
 # on the manylinks section at the moment
 physicsClient = p.connect(p.GUI)
@@ -16,9 +25,15 @@ p.loadSDF("world.sdf")
 
 pyrosim.Prepare_To_Simulate(robotId)
 
-iter_amt: int = 10000
+iter_amt: int = 1000
 backlegSensorValues = np.zeros(iter_amt)
 frontlegSensorValues = np.zeros(iter_amt)
+Backleg_targetAngles = Backleg_amplitude * np.sin(Backleg_frequency * np.linspace(0, 2 * np.pi, iter_amt) + Backleg_phaseOffset)
+Frontleg_targetAngles = Frontleg_amplitude * np.sin(Frontleg_frequency * np.linspace(0, 2 * np.pi, iter_amt) + Frontleg_phaseOffset)
+
+#np.save("data/BacklegtargetAngles.npy", Backleg_targetAngles)
+#np.save("data/FrontlegtargetAngles.npy", Frontleg_targetAngles)
+#exit()
 
 for n in range(iter_amt):
     p.stepSimulation()
@@ -29,15 +44,15 @@ for n in range(iter_amt):
         bodyIndex = robotId,
         jointName = "Torso_Backleg",
         controlMode = p.POSITION_CONTROL,
-        targetPosition = -math.pi/6.0,
-        maxForce = 500
+        targetPosition = Backleg_targetAngles[n],
+        maxForce = 50
     )
     pyrosim.Set_Motor_For_Joint(
         bodyIndex=robotId,
         jointName="Torso_Frontleg",
         controlMode=p.POSITION_CONTROL,
-        targetPosition=math.pi / 6.0,
-        maxForce=500
+        targetPosition=Frontleg_targetAngles[n],
+        maxForce=50
     )
     backlegSensorValues[n] = pyrosim.Get_Touch_Sensor_Value_For_Link("Backleg")
     frontlegSensorValues[n] = pyrosim.Get_Touch_Sensor_Value_For_Link("Frontleg")
