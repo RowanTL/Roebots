@@ -13,5 +13,5 @@ Torso_Frontleg_max_force = 50
 gravity = 9.8
 
 # loop controls
-iter_amt = 500
+iter_amt = 1000
 sleep_time = 1/70
