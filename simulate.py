@@ -7,7 +7,8 @@ from time import sleep
 
 class SIMULATION:
     def __init__(self):
-        physicsClient = p.connect(p.GUI)
+        #physicsClient = p.connect(p.GUI)
+        physicsClient = p.connect(p.DIRECT)
         p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, -gravity)
@@ -26,10 +27,14 @@ class SIMULATION:
             self.robot.Act(n)
 
             # motors always attached to joints and not links
-            sleep(sleep_time)
+            #sleep(sleep_time)
 
     # destructor
     def __del__(self):
         p.disconnect()
 
+    def Get_Fitness(self):
+        self.robot.Get_Fitness()
+
 simulation = SIMULATION()
+simulation.Get_Fitness()

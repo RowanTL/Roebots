@@ -57,9 +57,11 @@ def Generate_Body():
     pyrosim.Send_Cube(name="Frontleg", pos=[0.5,0,-0.5])
     pyrosim.End()
 
+def Generate_World():
     pyrosim.Start_SDF("world.sdf")
     pyrosim.Send_Cube(name=f"Box", pos=[x + 4,y + 4,z] , size=[s,s,s])
     pyrosim.End()
 
+Generate_World()
 Generate_Body()
 Generate_Brain()
