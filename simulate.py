@@ -17,12 +17,13 @@ class SIMULATION:
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, -gravity)
 
+        self.directOrGui = directOrGui
         self.world = WORLD()
         self.robot = ROBOT()
 
-        self.Run(directOrGui)
+        self.Run()
 
-    def Run(self, directOrGui: str):
+    def Run(self):
         for n in range(iter_amt):
             p.stepSimulation()
             # touch sensors only work with non-root links
@@ -31,7 +32,7 @@ class SIMULATION:
             self.robot.Act(n)
 
             # motors always attached to joints and not links
-            if directOrGui == "GUI":
+            if self.directOrGui == "GUI":
                 sleep(sleep_time)
 
     # destructor
