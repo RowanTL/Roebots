@@ -15,12 +15,12 @@ class SOLUTION:
         self.weights = self.weights * 2 - 1
         self.fitnessFile = "fitness.txt"
 
-    def Evaluate(self):
+    def Evaluate(self, directOrGui: str):
         self.Create_World()
         self.Create_Body()
         self.Create_Brain()
 
-        os.system("python3 simulate.py")
+        os.system(f"python3 simulate.py {directOrGui}")
         with open(self.fitnessFile, 'r') as file:
             self.fitness = float(file.read())
 
