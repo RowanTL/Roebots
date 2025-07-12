@@ -13,9 +13,9 @@ Torso_Frontleg_max_force = 50
 gravity = 9.8
 
 # simulation loop controls
-iter_amt = 500
+iter_amt = 1000
 sleep_time = 1/140
 
 # evolutionary run loop controls
-numberOfGenerations = 17
-populationSize = 2
+numberOfGenerations = 20
+populationSize = 20

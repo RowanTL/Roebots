@@ -5,7 +5,9 @@ import os
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
-        #self.parent = SOLUTION()
+        os.system("rm brain*.nndf") # if any of these files exist, could cause issues
+        os.system("rm fitness*.txt")
+
         self.parents: dict = {}
         self.nextAvailableID = 0
         for n in range(populationSize):
@@ -13,22 +15,29 @@ class PARALLEL_HILL_CLIMBER:
             self.nextAvailableID += 1
 
     def Spawn(self):
-        self.child = copy.deepcopy(self.parent)
-        self.child.Set_ID(self.nextAvailableID)
-        self.nextAvailableID += 1
+        self.children: dict = {}
+        for key in self.parents.keys():
+            self.children[key] = copy.deepcopy(self.parents[key])
+            #self.children[key].Set_ID(self.nextAvailableID)
+            #self.nextAvailableID += 1
+        #self.child = copy.deepcopy(self.parent)
+        #self.child.Set_ID(self.nextAvailableID)
+        #self.nextAvailableID += 1
 
     def Mutate(self):
-        self.child.Mutate()
+        for child in self.children.values():
+            child.Mutate()
 
     def Select(self):
-        if self.child.fitness > self.parent.fitness:
-            self.parent = self.child
+        for key in self.parents.keys():
+            if self.children[key].fitness > self.parents[key].fitness:
+                self.parents[key] = self.children[key]
 
     def Evolve_For_One_Generation(self):
         self.Spawn()
         self.Mutate()
-        self.child.Evaluate("DIRECT")
-        print(f"parent fitness: {self.parent.fitness}, child fitness: {self.child.fitness}")
+        self.Evaluate(self.children)
+        self.Print()
         self.Select()
 
     def Evolve(self):
@@ -36,10 +45,22 @@ class PARALLEL_HILL_CLIMBER:
         os.system("python simulate.py GUI")
         for currentGeneration in range(numberOfGenerations):
             self.Evolve_For_One_Generation()"""
+        self.Evaluate(self.parents)
+        for currentGeneration in range(numberOfGenerations):
+            self.Evolve_For_One_Generation()
+
+    def Evaluate(self, solutions: dict):
         for n in range(populationSize):
-            self.parents[n].Evaluate("DIRECT")
-        pass
+            solutions[n].Start_Simulation("DIRECT")
+        for n in range(populationSize):
+            solutions[n].Wait_For_Simulation_To_End()
 
     def Show_Best(self):
-        #os.system(f"python3 simulate.py GUI")
-        pass
+        sorted_parents = sorted(self.parents.values(), key=lambda item: item.fitness, reverse=True)
+        sorted_parents[0].Start_Simulation("GUI")
+
+    def Print(self):
+        print()
+        for key in self.parents:
+            print(f"parent {key} fitness: {self.parents[key].fitness}, child {key} fitness: {self.children[key].fitness}")
+        print()

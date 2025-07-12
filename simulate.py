@@ -41,7 +41,7 @@ class SIMULATION:
         p.disconnect()
 
     def Get_Fitness(self):
-        self.robot.Get_Fitness()
+        self.robot.Get_Fitness(self.solutionID)
 
 simulation = SIMULATION(sys.argv[1], sys.argv[2])
 simulation.Get_Fitness()

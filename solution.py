@@ -3,6 +3,8 @@ import random
 import numpy as np
 from pyrosim import pyrosim
 import os
+from pathlib import Path
+from time import sleep
 
 x = 0
 y = 0
@@ -16,14 +18,38 @@ class SOLUTION:
         self.myID = myID
         self.fitnessFile = f"fitness{myID}.txt"
 
-    def Evaluate(self, directOrGui: str):
+    def Start_Simulation(self, directOrGui: str):
         self.Create_World()
         self.Create_Body()
         self.Create_Brain(self.myID)
 
         os.system(f"python3 simulate.py {directOrGui} {self.myID} &")
+
+    def Wait_For_Simulation_To_End(self):
+        while not Path(self.fitnessFile).exists():
+            sleep(0.01)
         with open(self.fitnessFile, 'r') as file:
             self.fitness = float(file.read())
+        Path(self.fitnessFile).unlink(missing_ok=True)
+
+    def Evaluate(self, directOrGui: str):
+        """
+        This function might be slated for deletion later.
+        Still used in a call in the code.
+
+        :param directOrGui:
+        :return:
+        """
+        self.Create_World()
+        self.Create_Body()
+        self.Create_Brain(self.myID)
+
+        os.system(f"python3 simulate.py {directOrGui} {self.myID} &")
+        while not Path(self.fitnessFile).exists():
+            sleep(0.01)
+        with open(self.fitnessFile, 'r') as file:
+            self.fitness = float(file.read())
+        print("----------------------------", self.fitness)
 
     def Mutate(self):
         randomRow = random.randint(0, 2)
@@ -31,8 +57,8 @@ class SOLUTION:
         self.weights[randomRow][randomColumn] = random.random() * 2 - 1
 
 
-    def Create_Brain(self, id: int):
-        pyrosim.Start_NeuralNetwork(f"brain{id}.nndf")
+    def Create_Brain(self, solutionID: int):
+        pyrosim.Start_NeuralNetwork(f"brain{solutionID}.nndf")
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         pyrosim.Send_Sensor_Neuron(name=1, linkName="Backleg")
         pyrosim.Send_Sensor_Neuron(name=2, linkName="Frontleg")
