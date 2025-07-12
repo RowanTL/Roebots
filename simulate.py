@@ -7,7 +7,7 @@ from time import sleep
 import sys
 
 class SIMULATION:
-    def __init__(self, directOrGui: str):
+    def __init__(self, directOrGui: str, solutionID: str):
         #physicsClient = p.connect(p.GUI)
         if directOrGui == "GUI":
             physicsClient = p.connect(p.GUI)
@@ -18,8 +18,9 @@ class SIMULATION:
         p.setGravity(0, 0, -gravity)
 
         self.directOrGui = directOrGui
+        self.solutionID = solutionID
         self.world = WORLD()
-        self.robot = ROBOT()
+        self.robot = ROBOT(self.solutionID)
 
         self.Run()
 
@@ -42,5 +43,5 @@ class SIMULATION:
     def Get_Fitness(self):
         self.robot.Get_Fitness()
 
-simulation = SIMULATION(sys.argv[1])
+simulation = SIMULATION(sys.argv[1], sys.argv[2])
 simulation.Get_Fitness()

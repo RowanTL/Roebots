@@ -18,3 +18,4 @@ sleep_time = 1/140
 
 # evolutionary run loop controls
 numberOfGenerations = 17
+populationSize = 2

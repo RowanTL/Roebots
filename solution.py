@@ -10,17 +10,18 @@ z = 0.5
 s = 1  # size for later
 
 class SOLUTION:
-    def __init__(self):
+    def __init__(self, myID: int):
         self.weights = np.random.rand(3, 2)
         self.weights = self.weights * 2 - 1
-        self.fitnessFile = "fitness.txt"
+        self.myID = myID
+        self.fitnessFile = f"fitness{myID}.txt"
 
     def Evaluate(self, directOrGui: str):
         self.Create_World()
         self.Create_Body()
-        self.Create_Brain()
+        self.Create_Brain(self.myID)
 
-        os.system(f"python3 simulate.py {directOrGui}")
+        os.system(f"python3 simulate.py {directOrGui} {self.myID} &")
         with open(self.fitnessFile, 'r') as file:
             self.fitness = float(file.read())
 
@@ -30,8 +31,8 @@ class SOLUTION:
         self.weights[randomRow][randomColumn] = random.random() * 2 - 1
 
 
-    def Create_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain.nndf")
+    def Create_Brain(self, id: int):
+        pyrosim.Start_NeuralNetwork(f"brain{id}.nndf")
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         pyrosim.Send_Sensor_Neuron(name=1, linkName="Backleg")
         pyrosim.Send_Sensor_Neuron(name=2, linkName="Frontleg")
@@ -57,3 +58,6 @@ class SOLUTION:
         pyrosim.Start_SDF("world.sdf")
         pyrosim.Send_Cube(name=f"Box", pos=[x + 4, y + 4, z], size=[s, s, s])
         pyrosim.End()
+
+    def Set_ID(self, newID: int):
+        self.myID = newID
