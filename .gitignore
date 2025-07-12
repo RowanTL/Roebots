@@ -5,3 +5,12 @@ __pycache__
 
 # saved data
 data
+
+# ludobots files
+*.nndf
+*.txt
+*.sdf
+*.urdf
+
+# jetbrains
+.idea
