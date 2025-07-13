@@ -23,7 +23,7 @@ class SOLUTION:
         self.Create_Body()
         self.Create_Brain(self.myID)
 
-        os.system(f"python3 simulate.py {directOrGui} {self.myID} &")
+        os.system(f"python3 simulate.py {directOrGui} {self.myID} 2&>1 &")
 
     def Wait_For_Simulation_To_End(self):
         while not Path(self.fitnessFile).exists():
